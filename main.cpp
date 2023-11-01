@@ -4,6 +4,7 @@
 #include <vector>
 #include <queue>
 #include <unordered_set>
+#include <bitset>
 
 void printmatrix(const std::vector<std::vector<int>>& input) {
     for (const auto v :input) {
@@ -37,7 +38,8 @@ void getInputFromCin(std::vector<std::vector<int>>& input, std::pair<int,int>& s
         }
     }
     if (start.first == -1) {
-
+        std::cout << "0";
+        std::exit(0);
     }
 }
 
@@ -63,15 +65,34 @@ void calculateDistanceMatrix(std::vector<std::vector<int>>& input, std::pair<int
             std::pair<int,int> adj {cell.first + offset.first, cell.second + offset.second};
             if (isCellValid(input, adj.first, adj.second)) {
                 int currDistance = std::max(input[cell.first][cell.second],0);
-                if (/* input[adj.first][adj.second] > currDistance  || */ input[adj.first][adj.second] == 0) {
+                if (input[adj.first][adj.second] == 0) {
                     input[adj.first][adj.second] = currDistance + 1;
                     queue.push(adj);
                 }
             }
         }
-
     }
+}
 
+int readGoalDistanceSum(std::vector<std::vector<int>>& input) {
+    int distancesum {0};
+    for (int i = 0; i < input.size(); ++i) {
+        for (int j = 0; j < input[i].size(); ++j) {
+            if (input[i][j] < 0 && input[i][j] > -16) {
+                std::bitset<4> mask { static_cast<unsigned int >(-input[i][j]) };
+                int closestDistance {INT_MAX};
+                if (mask[0] && isCellValid(input, i, j + 1) && input[i][j + 1] > 0) closestDistance = std::min(closestDistance, input[i][j + 1]);
+                if (mask[1] && isCellValid(input, i - 1, j) && input[i - 1][j] > 0) closestDistance = std::min(closestDistance, input[i - 1][j]);
+                if (mask[2] && isCellValid(input, i, j - 1) && input[i][j - 1] > 0) closestDistance = std::min(closestDistance, input[i][j - 1]);
+                if (mask[3] && isCellValid(input, i + 1, j) && input[i + 1][j] > 0) closestDistance = std::min(closestDistance, input[i + 1][j]);
+
+                if (closestDistance == INT_MAX) closestDistance = 0;
+                distancesum += closestDistance;
+                printf("%d|%d distance is %d \n", i,j,closestDistance);
+            }
+        }
+    }
+    return distancesum;
 }
 
 int main(){
@@ -82,4 +103,5 @@ int main(){
     getInputFromCin(input, startpos, m, n);
     calculateDistanceMatrix(input, startpos);
     printmatrix(input);
+    std::cout << readGoalDistanceSum(input);
 }
