@@ -93,6 +93,5 @@ int main(){
     std::pair<int,int> startpos(-1,-1);
     getInputFromCin(input, startpos, m, n);
     calculateDistanceMatrix(input, startpos);
-    printmatrix(input);
     std::cout << readGoalDistanceSum(input);
 }
