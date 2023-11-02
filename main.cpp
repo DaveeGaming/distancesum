@@ -9,15 +9,6 @@
 
 constexpr std::pair<int,int> offsets[4] {{0, 1}, {-1, 0}, {0, -1}, {1, 0} };
 
-void printmatrix(const std::vector<std::vector<int>>& input) {
-    for (const auto& v :input) {
-        for (const auto i : v) {
-            printf("%03d ", i);
-        }
-        printf("\n");
-    }
-}
-
 int inputCharToInt(const char c) {
     switch (c) {
         case '-': return 0;
@@ -34,6 +25,7 @@ int inputCharToInt(const char c) {
 void getInputFromCin(std::vector<std::vector<int>>& input, std::pair<int,int>& start,const int m,const int n) {
     for (int i = 0; i < m; ++i) {
         std::string tmp;
+        tmp.reserve(n);
         std::cin >> tmp;
         for (int j = 0; j < n; ++j) {
             input[i][j] = inputCharToInt(tmp[j]);
@@ -54,11 +46,14 @@ inline bool isCellValid(const std::vector<std::vector<int>>& input,const int x,c
 void calculateDistanceMatrix(std::vector<std::vector<int>>& input, std::pair<int,int>& start) {
     std::queue<std::pair<int,int>> queue;
     queue.push(start);
+
     while (!queue.empty()) {
         std::pair<int,int> cell = queue.front();
         queue.pop();
+
         for (auto offset : offsets) {
             std::pair<int,int> adj {cell.first + offset.first, cell.second + offset.second};
+
             if (isCellValid(input, adj.first, adj.second)) {
                 int currDistance = std::max(input[cell.first][cell.second],0);
                 if (input[adj.first][adj.second] == 0) {
@@ -69,6 +64,7 @@ void calculateDistanceMatrix(std::vector<std::vector<int>>& input, std::pair<int
         }
     }
 }
+
 
 int readGoalDistanceSum(const std::vector<std::vector<int>>& input) {
     int distancesum {0};
