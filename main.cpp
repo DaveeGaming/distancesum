@@ -38,7 +38,7 @@ void getInputFromCin(std::vector<std::vector<int>>& input, std::pair<int,int>& s
     }
 }
 
-inline bool isCellValid(const std::vector<std::vector<int>>& input,const int x,const int y) {
+bool isCellValid(const std::vector<std::vector<int>>& input,const int x,const int y) {
     return ( (x >= 0 && x < input.size()) && (y >= 0 && y < input[0].size()));
 }
 
