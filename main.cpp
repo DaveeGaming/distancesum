@@ -71,12 +71,12 @@ int readGoalDistanceSum(const std::vector<std::vector<int>>& input) {
     for (int i = 0; i < input.size(); ++i) {
         for (int j = 0; j < input[i].size(); ++j) {
             if (input[i][j] < 0 && input[i][j] > -16) {
-                std::bitset<4> mask { static_cast<unsigned int >(-input[i][j]) };
+                int mask = -input[i][j];
                 int closestDistance {INT_MAX};
-                if (mask[0] && isCellValid(input, i, j + 1) && input[i][j + 1] > 0) closestDistance = std::min(closestDistance, input[i][j + 1]);
-                if (mask[1] && isCellValid(input, i - 1, j) && input[i - 1][j] > 0) closestDistance = std::min(closestDistance, input[i - 1][j]);
-                if (mask[2] && isCellValid(input, i, j - 1) && input[i][j - 1] > 0) closestDistance = std::min(closestDistance, input[i][j - 1]);
-                if (mask[3] && isCellValid(input, i + 1, j) && input[i + 1][j] > 0) closestDistance = std::min(closestDistance, input[i + 1][j]);
+                if (mask & 1 && isCellValid(input, i, j + 1) && input[i][j + 1] > 0) closestDistance = std::min(closestDistance, input[i][j + 1]);
+                if (mask & 2 && isCellValid(input, i - 1, j) && input[i - 1][j] > 0) closestDistance = std::min(closestDistance, input[i - 1][j]);
+                if (mask & 4 && isCellValid(input, i, j - 1) && input[i][j - 1] > 0) closestDistance = std::min(closestDistance, input[i][j - 1]);
+                if (mask & 8 && isCellValid(input, i + 1, j) && input[i + 1][j] > 0) closestDistance = std::min(closestDistance, input[i + 1][j]);
 
                 if (closestDistance == INT_MAX) closestDistance = 0;
                 distancesum += closestDistance;
