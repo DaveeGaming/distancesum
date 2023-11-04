@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 #include <queue>
-#include <bitset>
 #include <chrono>
 #include <set>
+#include <limits>
 
 constexpr std::pair<int,int> offsets[4] {{0, 1}, {-1, 0}, {0, -1}, {1, 0} };
 
@@ -72,13 +72,13 @@ int readGoalDistanceSum(const std::vector<std::vector<int>>& input) {
         for (int j = 0; j < input[i].size(); ++j) {
             if (input[i][j] < 0 && input[i][j] > -16) {
                 int mask = -input[i][j];
-                int closestDistance {INT_MAX};
+                int closestDistance {std::numeric_limits<int>::max()};
                 if (mask & 1 && isCellValid(input, i, j + 1) && input[i][j + 1] > 0) closestDistance = std::min(closestDistance, input[i][j + 1]);
                 if (mask & 2 && isCellValid(input, i - 1, j) && input[i - 1][j] > 0) closestDistance = std::min(closestDistance, input[i - 1][j]);
                 if (mask & 4 && isCellValid(input, i, j - 1) && input[i][j - 1] > 0) closestDistance = std::min(closestDistance, input[i][j - 1]);
                 if (mask & 8 && isCellValid(input, i + 1, j) && input[i + 1][j] > 0) closestDistance = std::min(closestDistance, input[i + 1][j]);
 
-                if (closestDistance == INT_MAX) closestDistance = 0;
+                if (closestDistance == std::numeric_limits<int>::max()) closestDistance = 0;
                 distancesum += closestDistance;
             }
         }
